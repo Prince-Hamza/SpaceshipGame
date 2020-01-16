@@ -1,0 +1,44 @@
+
+#Theme{
+position:absolute;
+top:0%;left:0%;
+width:200%; height:100%;
+z-index:-1
+}
+
+#Spaceship {
+position:absolute;
+width:10%;
+height:10%;
+top:85%;
+left:30%;
+z-index:1
+}
+
+
+.Crater {
+position:absolute;
+width:10%;
+height:10%;
+
+}
+
+#C1{
+top:5%;
+left:60%;
+}
+
+#C2{
+top:70%;
+left:60%;
+}
+
+#C3{
+top:37%;
+left:40%;
+}
+
+#C4{
+top:37%;
+left:80%;
+}

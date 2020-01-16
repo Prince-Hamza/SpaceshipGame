@@ -1,0 +1,32 @@
+   @mixin Style() {
+      font:  bold italic 35px times new roman;
+      color: rgb(53, 231, 255);
+   }
+
+   @mixin Center {
+     position:absolute;
+     top:5%;
+     left:35%;     
+   }
+
+   
+#Head {
+  @include Style();
+  @include Center();
+}
+
+body {
+height:100%;
+  background: #222;
+background: linear-gradient(90deg, rgba(99,121,224,1) 0%, rgba(214,93,232,1) 46%, rgba(255,0,112,1) 100%);
+}
+
+
+html {
+  overflow:  hidden;
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; /* make scrollbar transparent */
+}

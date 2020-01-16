@@ -1,0 +1,14 @@
+#CB {
+    position:fixed;
+    left:850px;
+    top:400px;
+    width:250px;
+    height:50px;
+    background-color: black;
+    color:blue;
+    outline:none;
+    box-shadow: 0px 0px 7px 0px white;
+    border-style:none;
+    cursor:pointer;
+
+}

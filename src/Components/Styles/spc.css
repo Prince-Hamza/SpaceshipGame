@@ -1,17 +1,20 @@
 
-#Theme{
+.Theme{
 position:absolute;
 top:0%;left:0%;
-width:600%; height:120%;
+width:100%; height:100%;
 z-index:-1
 }
+#Theme2{left:100%}
+#Theme3{left:200%}
+#Theme4{left:300%}
 
 #Spaceship {
 position:absolute;
 width:120px;
 height:100px;
 top:30%;
-left:80%;
+left:0%;
 z-index:1
 }
 
@@ -22,6 +25,20 @@ width:10%;
 height:10%;
 
 }
+
+
+
+#Robot {
+
+position:absolute;
+left:270% ; top :50%;
+height:25% ; width:20%
+
+}
+
+
+
+
 
 #C1{
 top:5%;

@@ -8,6 +8,13 @@ import {Locations} from './data.js'
 export default class LogoAnime extends React.Component {
 
     componentDidMount(e) {  
+
+
+  var el = document.getElementById("canvas");
+  el.addEventListener("touchstart", handleStart, false);
+
+
+
     
       document.onkeydown = this.Arrow;
 
@@ -49,8 +56,8 @@ $(document).on('mousewheel', function(event) {
     this.state = {
     CraterInfo:[],
     CurrentCrater : -1,
-    CurrentLeft : 300,
-    CurrentTop : 800,
+    CurrentLeft : 0,
+    CurrentTop : 500,
     Visible_Area : 1024
 
     };
@@ -60,9 +67,17 @@ $(document).on('mousewheel', function(event) {
 }       
 
  AutoScroll = (x) => {
+
+ var loc = $(document).scrollLeft()
+
+ if (loc < 2400) {
+
  $("html,body").animate({
         scrollLeft:x 
     }, 1000);
+
+} // if end
+
  }
 
 
@@ -72,20 +87,24 @@ $(document).on('mousewheel', function(event) {
             
                 var previousTop = this.state.CurrentTop
                 var previousLeft = this.state.CurrentLeft
+
             
 
           this.setState({CurrentCrater : this.state.CurrentCrater + 1 })
 
 
            
-              if (previousLeft < iLeft)  {  
-  
+              if (previousLeft < iLeft)  { 
+
+
+
                         
                        $('#Spaceship').animateRotate(25);
                        if (previousTop < iTop) $('#Spaceship').animateRotate(55);
                        if (previousTop > iTop) $('#Spaceship').animateRotate(15);
                      
                        ScrollState = 1
+
                  
 
 }
@@ -97,7 +116,9 @@ $(document).on('mousewheel', function(event) {
                             if (previousTop > iTop) $('#Spaceship').animateRotate(-115);
                             if (previousTop < iTop) $('#Spaceship').animateRotate(-165);
 
-                     ScrollState = -1
+                   if(iLeft != 85)  {ScrollState = -1}
+
+
 
 }
      if (previousLeft == iLeft)  {
@@ -114,7 +135,7 @@ $(document).on('mousewheel', function(event) {
 
 
 
-         if(!Locked)       this.setState({ CurrentTop : iTop , CurrentLeft: iLeft  }) 
+       
 
 
                                     
@@ -123,13 +144,16 @@ var w = window.innerWidth;var h = window.innerHeight
 var DecLeft = (w/100) * iLeft
 var DecTop = (h/100) * iTop
 
-var Leftsubtract = (DecLeft / 100) * 2
-var Topsubtract =  (DecTop / 100) * 2
+var Leftsubtract = (DecLeft / 100) * 8
+var Topsubtract =  (DecTop / 100) * 8
+
 
 
   if (Locked)  {
 
-            $("#Spaceship").delay(400).animate({left: DecLeft - Leftsubtract  , top: DecTop - Topsubtract  },500); // halfway
+            $("#Spaceship").delay(400).animate({left: DecLeft - Leftsubtract   , top: DecTop - Topsubtract   },500); // halfway
+
+
             setTimeout (() => {  $('#Spaceship').animateRotate(-200) } , 1500)  
             $("#Spaceship").delay(800).animate({left: previousLeft + "%" , top: previousTop + "%"  },500); //return
 
@@ -139,7 +163,14 @@ var Topsubtract =  (DecTop / 100) * 2
 
   if (!Locked) { 
 
+         
+           $("#Spaceship").delay(200).animate({left: DecLeft  , top:DecTop },500);  
+           this.setState({ CurrentTop : iTop , CurrentLeft: iLeft  })     
 
+
+      }
+
+ 
            var Where = DecLeft
 
            var Screen = window.innerWidth
@@ -154,32 +185,17 @@ var Topsubtract =  (DecTop / 100) * 2
 
            var Middle = Start + TwoParts
 
-           var n = (Screen/4) * ScrollState
-
-           if (Where > First_Tri && Where < Middle) { this.AutoScroll(Start + n) }
-
-           $("#Spaceship").delay(200).animate({left: DecLeft  , top:DecTop },500);
+           var n = (Screen/4) * ScrollState;var n2 = (Screen/2) * ScrollState
 
 
 
-      }
+           if (Where > First_Tri && Where < Middle ) { this.AutoScroll(Start + n) }
+           if (Where >  Middle) { this.AutoScroll(Start + n2) }
+           if (ScrollState == -1 && Where <  Middle) { this.AutoScroll(Start - (Screen/3)) }
 
- 
 
-      
            
-                      //    $('html,body').stop()
-
-                       //   var v = $(document).scrollLeft()
-
-                        //  var Screen = window.innerWidth
-
-                       //   var n = (Screen/2.6) * ScrollState
-
-                        //console.log(v + n)
-
-                         //if (v < (Screen + 700))    { this.AutoScroll(2000) }
-
+                     
 
 
   }
@@ -191,7 +207,6 @@ var Topsubtract =  (DecTop / 100) * 2
      render() {
        return (
          <div>
-
 
       <img id = "Spaceship" src = {require("./Images/rocket-trans.png")} />
 
@@ -221,15 +236,23 @@ return (
    
              })}
 
-  <img id = "Theme" src = {require("./Images/Theme3.jpg")} /> 
+  <img className = "Theme" id = "Theme1" src = {require("./Images/Theme3.jpg")} /> 
+  <img className = "Theme" id = "Theme2" src = {require("./Images/Theme3.jpg")} /> 
+  <img className = "Theme" id = "Theme3" src = {require("./Images/Theme3.jpg")} /> 
+  <img className = "Theme" id = "Theme4" src = {require("./Images/Theme3.jpg")} /> 
+  
+ <img src = {require("./Images/Robot.png")} id = "Robot" />
 
-  <img className = "Crater" id = "CSL" style = {{top:"5%",left:"260%"}}  src = {require("./Images/LockedCrater.jpg")}
-                                                                         onClick = {() => { this.SuperStructure(5,230,true) }} /> 
+
+  <img className = "Crater" id = "CSL" style = {{top:"5%",left:"240%"}}  src = {require("./Images/LockedCrater.jpg")}
+       onClick = {() => { this.SuperStructure(5,240,true) }} /> 
 
 
-         <img className = "Crater" id = "CL"  style = {{top:"80%",left:"290%"}} src = {require("./Images/LockedCrater.jpg")} 
-                                                                          onClick = {() => { this.SuperStructure(70,250,true)  }} /> 
+  <img className = "Crater" id = "CL"  style = {{top:"60%",left:"250%"}} src = {require("./Images/LockedCrater.jpg")} 
+       onClick = {() => { this.SuperStructure(70,250,true)  }} /> 
 
+
+<canvas style = {{width:"100%" , height: "100%"}} id = "canvas" />
 
          </div>
        );
@@ -264,5 +287,16 @@ $.fn.animateRotate = function(angle, duration, easing, complete) {
   });
 };
 
+
+function handleStart(evt) {
+alert("TrackPad")
+  evt.preventDefault();
+  console.log("touchstart.");
+  var el = document.getElementById("canvas");
+  var ctx = el.getContext("2d");
+  var touches = evt.changedTouches;
+alert(touches)
+
+}
 
 

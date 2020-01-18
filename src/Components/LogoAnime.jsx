@@ -3,15 +3,15 @@ import './Styles/spc.css'
 import './circle.scss'
 import $ from 'jquery'
 import {Locations} from './data.js'
+import Hammer from 'react-hammerjs'
 
 
 export default class LogoAnime extends React.Component {
 
     componentDidMount(e) {  
 
+      // var view = document.querySelector("#View")
 
-  var el = document.getElementById("canvas");
-  el.addEventListener("touchstart", handleStart, false);
 
 
 
@@ -65,12 +65,35 @@ $(document).on('mousewheel', function(event) {
 
 
 }       
+ 
+
+ Cursor = (e) => {
+
+  console.log(e.screenX)
+
+           var Screen = window.innerWidth
+           var Start = $(document).scrollLeft()
+           var EndPoint = Start + Screen
+           var TwoParts = (Screen / 3)  + (Screen / 3)
+           var First_Tri = Start + (Screen / 3) 
+           var Middle = Start + TwoParts
+
+
+           if (e.screenX  < (First_Tri/25)) {
+                  $('html , body').stop()
+
+                  this.AutoScroll(Start - (Screen/3)) 
+               }
+ 
+
+ }
+
 
  AutoScroll = (x) => {
 
  var loc = $(document).scrollLeft()
 
- if (loc < 2400) {
+ if (loc < 2900) {
 
  $("html,body").animate({
         scrollLeft:x 
@@ -81,10 +104,11 @@ $(document).on('mousewheel', function(event) {
  }
 
 
- SuperStructure  = (iTop , iLeft , Locked) => {  
+ SuperStructure  = (iTop , iLeft , Locked , e) => {  
 
   
-            
+
+
                 var previousTop = this.state.CurrentTop
                 var previousLeft = this.state.CurrentLeft
 
@@ -189,6 +213,8 @@ var Topsubtract =  (DecTop / 100) * 8
 
 
 
+
+
            if (Where > First_Tri && Where < Middle ) { this.AutoScroll(Start + n) }
            if (Where >  Middle) { this.AutoScroll(Start + n2) }
            if (ScrollState == -1 && Where <  Middle) { this.AutoScroll(Start - (Screen/3)) }
@@ -201,34 +227,49 @@ var Topsubtract =  (DecTop / 100) * 8
   }
 
 
+handleTap = (e) => {
+    //alert("tap: " + e.deltaX)
+}
  
+handleSwipe = (e) => {
 
+ alert("Swipe")
+
+ var deltaX = 0;
+ deltaX = deltaX + e.deltaX
+ var direction = e.offsetDirection
+ alert(direction)
+ if (direction === 4 || direction === 2) {  //2 is left , -200 left edge
+ alert(direction)
+ alert(deltaX)
+
+}
+
+ }
   
      render() {
        return (
-         <div>
 
-      <img id = "Spaceship" src = {require("./Images/rocket-trans.png")} />
+          <Hammer onTap={(e)=> {this.handleTap(e) }} onSwipe={(e)=>{this.handleSwipe(e) }}>
 
-        {this.state.CraterInfo.map(i=>{
+            <div  onMouseMove = {(e) => { this.Cursor(e) } } id = "View" >
 
+            <img id = "Spaceship" src = {require("./Images/rocket-trans.png")} />
 
+            {this.state.CraterInfo.map(i=>{
 
-return ( 
+                     return (     
 
-    
+                       <img className = "Crater" key = {i.key} style ={{top:i.Top + "%"  , left:i.Left + "%"   }} 
 
-      <img className = "Crater" key = {i.key} style ={{top:i.Top + "%"  , left:i.Left + "%"   }} 
+                        src = {require("./Images/CraterTitle.jpg")} onClick = {(e) =>   {
 
-           src = {require("./Images/CraterTitle.jpg")} onClick = {() =>   {
-
-  this.SuperStructure(i.Top , i.Left)
+                        this.SuperStructure(i.Top , i.Left , false , e)
 
                 
+                             }}/>
 
-}}/>
-
-)
+                        )
 
 
 
@@ -252,9 +293,17 @@ return (
        onClick = {() => { this.SuperStructure(70,250,true)  }} /> 
 
 
-<canvas style = {{width:"100%" , height: "100%"}} id = "canvas" />
+  <canvas style = {{width:"100%" , height: "100%"}} id = "canvas" />
+
+
+
+
+
+
+
 
          </div>
+</Hammer>
        );
      }
 
@@ -288,15 +337,5 @@ $.fn.animateRotate = function(angle, duration, easing, complete) {
 };
 
 
-function handleStart(evt) {
-alert("TrackPad")
-  evt.preventDefault();
-  console.log("touchstart.");
-  var el = document.getElementById("canvas");
-  var ctx = el.getContext("2d");
-  var touches = evt.changedTouches;
-alert(touches)
-
-}
 
 

@@ -14,7 +14,6 @@ export default class LogoAnime extends React.Component {
 
 
 
-
     
       document.onkeydown = this.Arrow;
 
@@ -38,7 +37,7 @@ export default class LogoAnime extends React.Component {
 $(document).on('mousewheel', function(event) {
     console.log(event.deltaX, event.deltaY, event.deltaFactor);
 
-    if(Math.abs(event.deltaY)<=40)         event.deltaY/=40;if(event.DeltaX > 0) alert("")
+    if(Math.abs(event.deltaY)<=40)         event.deltaY/=40;if(event.DeltaX > 0) 
     if(Math.abs(event.deltaX)>=40)         event.deltaX/=40;
 
 
@@ -58,7 +57,8 @@ $(document).on('mousewheel', function(event) {
     CurrentCrater : -1,
     CurrentLeft : 0,
     CurrentTop : 500,
-    Visible_Area : 1024
+    Visible_Area : 1024,
+
 
     };
 
@@ -81,30 +81,31 @@ $(document).on('mousewheel', function(event) {
 
            if (e.screenX  < (First_Tri/25)) {
                   $('html , body').stop()
-
-                  this.AutoScroll(Start - (Screen/3)) 
+                  this.AutoScroll(Start - (Screen/3) , true) 
                }
  
 
  }
 
 
- AutoScroll = (x) => {
+ AutoScroll = (x , bx) => {
 
- var loc = $(document).scrollLeft()
+ var loc = $(document).scrollLeft(); var S = "true";
+ if (loc < 2150 ) { S = "true" }
+ if (loc > 2150 && ScrollState == -1 ) {S = "true" }
+ if (loc > 2150 && ScrollState == 1 ) {S = "false" }
+ if (bx == true ) {S = "true" }
 
- if (loc < 2900) {
-
+if (S === "true") { 
  $("html,body").animate({
         scrollLeft:x 
     }, 1000);
 
-} // if end
+ } // if end
+}
 
- }
 
-
- SuperStructure  = (iTop , iLeft , Locked , e) => {  
+ SuperStructure  = (iTop , iLeft , Locked ) => {  
 
   
 
@@ -165,8 +166,8 @@ $(document).on('mousewheel', function(event) {
                                     
 var w = window.innerWidth;var h = window.innerHeight
 
-var DecLeft = (w/100) * iLeft
-var DecTop = (h/100) * iTop
+var DecLeft = (w/100) * (iLeft - 2 * (ScrollState))
+var DecTop = (h/100) * (iTop + 1 * (ScrollState))
 
 var Leftsubtract = (DecLeft / 100) * 8
 var Topsubtract =  (DecTop / 100) * 8
@@ -217,7 +218,8 @@ var Topsubtract =  (DecTop / 100) * 8
 
            if (Where > First_Tri && Where < Middle ) { this.AutoScroll(Start + n) }
            if (Where >  Middle) { this.AutoScroll(Start + n2) }
-           if (ScrollState == -1 && Where <  Middle) { this.AutoScroll(Start - (Screen/3)) }
+
+           if (ScrollState == -1 && Where < Middle) { this.AutoScroll(Start - (Screen/3)) }
 
 
            
@@ -254,20 +256,24 @@ handleSwipe = (e) => {
 
             <div  onMouseMove = {(e) => { this.Cursor(e) } } id = "View" >
 
-            <img id = "Spaceship" src = {require("./Images/rocket-trans.png")} />
+            <img id = "Spaceship" src = {require("./Images/Rocket-true.png")} />
 
             {this.state.CraterInfo.map(i=>{
 
-                     return (     
+{   if(i.Locked) { Lock = true } else {Lock = false}   }
 
-                       <img className = "Crater" key = {i.key} style ={{top:i.Top + "%"  , left:i.Left + "%"   }} 
+                     return (    
 
-                        src = {require("./Images/CraterTitle.jpg")} onClick = {(e) =>   {
 
-                        this.SuperStructure(i.Top , i.Left , false , e)
+<div>
+ 
+  {Lock && <img className = "LockedCrater"  key = {i.key}  style ={{top:i.Top + "%"  , left:i.Left  + "%" , width: i.width + "%" , height: i.height + "%"    }} 
+           src={require("./Images/Ellipse.png")} /> } 
 
-                
-                             }}/>
+   <div className = "trans" key = {i.key} style ={{top:i.Top  + "%"  , left:i.Left + "%"   }} 
+                        onClick = {(e) =>   { this.SuperStructure(i.Top  , i.Left  , i.Locked ) }}   />
+
+</div>
 
                         )
 
@@ -277,23 +283,28 @@ handleSwipe = (e) => {
    
              })}
 
-  <img className = "Theme" id = "Theme1" src = {require("./Images/Theme3.jpg")} /> 
-  <img className = "Theme" id = "Theme2" src = {require("./Images/Theme3.jpg")} /> 
-  <img className = "Theme" id = "Theme3" src = {require("./Images/Theme3.jpg")} /> 
-  <img className = "Theme" id = "Theme4" src = {require("./Images/Theme3.jpg")} /> 
-  
- <img src = {require("./Images/Robot.png")} id = "Robot" />
 
 
-  <img className = "Crater" id = "CSL" style = {{top:"5%",left:"240%"}}  src = {require("./Images/LockedCrater.jpg")}
-       onClick = {() => { this.SuperStructure(5,240,true) }} /> 
+    <img className = "Theme" id = "Theme1" src = {require("./Images/Theme.jpg")} /> 
+    <img className = "Theme" id = "Theme2" src = {require("./Images/Theme.jpg")} /> 
+    <img className = "Theme" id = "Theme3" src = {require("./Images/Theme.jpg")} /> 
+    <img className = "Theme" id = "Theme4" src = {require("./Images/Theme.jpg")} /> 
 
 
-  <img className = "Crater" id = "CL"  style = {{top:"60%",left:"250%"}} src = {require("./Images/LockedCrater.jpg")} 
-       onClick = {() => { this.SuperStructure(70,250,true)  }} /> 
+    <img className = "line" id = "line1" src = {require("./Images/line.png")} /> 
+    <img className = "line" id = "line2" src = {require("./Images/line.png")} /> 
+    <img className = "line" id = "line3" src = {require("./Images/line.png")} /> 
+
+    <img src = {require("./Images/Robot.png")} id = "Robot" />
 
 
-  <canvas style = {{width:"100%" , height: "100%"}} id = "canvas" />
+
+
+
+
+
+
+
 
 
 
@@ -312,8 +323,7 @@ handleSwipe = (e) => {
 var MyTop
 var locations
 var Time = 1
-
-
+var Lock = false
 var scrnum = [6,12,18,24]
 var LockedCrators
 var ScrollState = 1
